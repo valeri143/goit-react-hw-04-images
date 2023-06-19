@@ -10,7 +10,7 @@ export const ImageGalleryItem = ({ webformatURL, largeImageURL, tags }) => {
     };
   
    const  closeModal = () => {
-      this.setState({ modalIsOpen: false });
+      setModalIsOpen(false)
     };
         return (
             <StyledLi>

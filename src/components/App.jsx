@@ -16,11 +16,11 @@ export const App = () => {
     if (query === "") {
       return;
     }
-
+const splitedQuery = query.split('/', 2);
     const fetchImages = async () => {
       setIsLoading(true);
       try {
-        const data = await getImages(query, page);
+        const data = await getImages(splitedQuery[1], page);
         if(images !== data.hits){
           setImages((prevImages) => [...prevImages, ...data.hits]);
         }
@@ -36,7 +36,7 @@ export const App = () => {
     };
 
     fetchImages();
-  }, [query, page, images]);
+  }, [query, page]);
 
   const getImages = async (query, page) => {
     try {
@@ -55,7 +55,7 @@ export const App = () => {
 
   const onSubmit = async (values, { resetForm }) => {
     setImages([]);
-    setQuery(values.query);
+    setQuery(`${Date.now()}/${values.query}`);
     setPage(1);
     setIsLoading(false);
     resetForm();
