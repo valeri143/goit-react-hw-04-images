@@ -21,11 +21,12 @@ const splitedQuery = query.split('/', 2);
       setIsLoading(true);
       try {
         const data = await getImages(splitedQuery[1], page);
-        if(images !== data.hits){
+        // if(images !== data.hits){
           setImages((prevImages) => [...prevImages, ...data.hits]);
-        }
+        // }
         setIsVisibleButton(
-          images.length + data.hits.length < data.totalHits
+          // images.length + data.hits.length < data.totalHits
+          page < Math.ceil(data.totalHits / data.per_page)
         );
       } catch (error) {
         console.error("Ошибка:", error.message);
