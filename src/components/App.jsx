@@ -16,20 +16,16 @@ export const App = () => {
     if (query === "") {
       return;
     }
-const splitedQuery = query.split('/', 2);
+    const splitedQuery = query.split('/', 2);
+    const p_page = 12;
     const fetchImages = async () => {
-      setIsLoading(true);
+    setIsLoading(true);
       try {
-        const data = await getImages(splitedQuery[1], page);
-        // if(images !== data.hits){
-          setImages((prevImages) => [...prevImages, ...data.hits]);
-        // }
-        setIsVisibleButton(
-          // images.length + data.hits.length < data.totalHits
-          page < Math.ceil(data.totalHits / data.per_page)
-        );
+        const {hits} = await getImages(splitedQuery[1], page);
+        setImages((prevImages) => [...prevImages, ...hits]);
+        setIsVisibleButton(hits.length === p_page);
       } catch (error) {
-        console.error("Ошибка:", error.message);
+        console.log(error);
         setIsVisibleButton(false);
       } finally {
         setIsLoading(false);
@@ -43,14 +39,13 @@ const splitedQuery = query.split('/', 2);
     try {
       const dataOfImages = await fetchImageData(query, page);
       if (dataOfImages.hits.length === 0) {
-        window.alert("Упс! По вашему запросу нет изображений.");
         setIsVisibleButton(false);
+        window.alert("Упс! По вашему запросу нет изображений.");
         return;
       }
       return dataOfImages;
     } catch (error) {
-      console.error("Ошибка:", error.message);
-      throw error;
+      console.log(error);
     }
   };
 
@@ -58,6 +53,7 @@ const splitedQuery = query.split('/', 2);
     setImages([]);
     setQuery(`${Date.now()}/${values.query}`);
     setPage(1);
+    setIsVisibleButton(false);
     setIsLoading(false);
     resetForm();
   };
